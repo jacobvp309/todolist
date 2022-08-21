@@ -3,6 +3,6 @@
 ################################################################################
 
 /todolist_api/obj
-/todolist_UI/.vs/todolist_UI
+/todolist_UI/.vs
 /todolist_UI/todolist_UI/obj
 /todolist_api/bin
