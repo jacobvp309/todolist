@@ -10,7 +10,7 @@ namespace todolist_api.Models
         public string Taskname { get; set; }
 
         //[Column(TypeName = "Date")]
-        public DateTime Duedate { get; set; }
+        public String Duedate { get; set; }
 
         public String Status { get; set; }
 

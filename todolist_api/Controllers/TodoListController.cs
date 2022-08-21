@@ -4,7 +4,7 @@ using todolist_api.Models;
 
 namespace todolist_api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]/[action]")]
     [ApiController]
     public class TodoListController : ControllerBase
     {
@@ -21,7 +21,7 @@ namespace todolist_api.Controllers
         }
 
         [HttpGet(Name = "ListItems")]
-        public IEnumerable<TodoItem> ListItems(String status)
+        public IEnumerable<TodoItem> ListItems(String? status)
         {
             var builder = WebApplication.CreateBuilder();
             using var todoContext = new TodoContext(builder.Configuration.GetConnectionString("TodolistDB"));
