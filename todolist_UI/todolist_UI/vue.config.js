@@ -19,17 +19,12 @@ const keyFilePath = path.join(baseFolder, `${certificateName}.key`);
 
 module.exports = {
     devServer: {
-        https: {
-            key: fs.readFileSync(keyFilePath),
-            cert: fs.readFileSync(certFilePath),
-        },
+        //https: {
+        //    key: fs.readFileSync(keyFilePath),
+        //    cert: fs.readFileSync(certFilePath),
+        //},
+        https: true,
         proxy: {    
-            '^/TodoList/GetAll': {
-                target: 'https://localhost:5001'
-            },
-            '^/TodoList/Add': {
-                target: 'https://localhost:5001'
-            }
         },
         port: 5002
     }
