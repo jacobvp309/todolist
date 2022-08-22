@@ -57,25 +57,43 @@ namespace todolist_api.Controllers
 
             item.Status = "PENDING";
 
-            todoContext.TodoItems.Add(item);
-            todoContext.SaveChanges();
+            if (DateTime.Now.CompareTo(DateTime.Parse(item.Duedate))  == 1)
+            {
+                return false;
+            }
 
-            return true;
+            if (!todoContext.TodoItems.Any(task => task.Taskname == item.Taskname && task.Duedate == item.Duedate))
+            {
+                todoContext.TodoItems.Add(item);
+                todoContext.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }            
         }
 
-        [HttpPost(Name = "UpdateItemStatus")]
-        public bool UpdateStatus(int id)
+        [HttpPost(Name = "UpdateStatus")]
+        public bool UpdateStatus(TodoItem item)
         {
             var builder = WebApplication.CreateBuilder();
             using var todoContext = new TodoContext(builder.Configuration.GetConnectionString("TodolistDB"));
 
-            var item = todoContext.TodoItems.Where(itm => itm.Id == id).First();
+            var reqItem = todoContext.TodoItems.Where(itm => itm.Id == item.Id).FirstOrDefault();
 
-            item.Status = "DONE";
-            
-            todoContext.SaveChanges();
+            if(reqItem != null)
+            {
+                reqItem.Status = "DONE";
 
-            return true;
+                todoContext.SaveChanges();
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         [HttpPost(Name = "UpdateItem")]
@@ -84,28 +102,47 @@ namespace todolist_api.Controllers
             var builder = WebApplication.CreateBuilder();
             using var todoContext = new TodoContext(builder.Configuration.GetConnectionString("TodolistDB"));
 
-            var reqItem = todoContext.TodoItems.Where(itm => itm.Id == item.Id).First();
+            if (DateTime.Now.CompareTo(DateTime.Parse(item.Duedate)) == 1)
+            {
+                return false;
+            }
 
-            reqItem.Taskname = item.Taskname;
-            reqItem.Duedate = item.Duedate;
-            reqItem.Description = item.Description;
+            var reqItem = todoContext.TodoItems.Where(itm => itm.Id == item.Id).FirstOrDefault();
+            if( reqItem != null && !todoContext.TodoItems.Any(task => task.Taskname == item.Taskname && task.Duedate == item.Duedate))
+            {
+                reqItem.Taskname = item.Taskname;
+                reqItem.Duedate = item.Duedate;
+                reqItem.Description = item.Description;
+                reqItem.Status = item.Status;
 
-            todoContext.SaveChanges();
+                todoContext.SaveChanges();
 
-            return true;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
         }
 
         [HttpPost(Name = "DeleteItem")]
-        public bool DeleteItem(int id)
+        public bool DeleteItem(TodoItem item)
         {
             var builder = WebApplication.CreateBuilder();
             using var todoContext = new TodoContext(builder.Configuration.GetConnectionString("TodolistDB"));
 
-            var item = todoContext.TodoItems.Where(itm => itm.Id == id).First();
-            todoContext.TodoItems.Remove(item);
-            todoContext.SaveChanges();
-
-            return true;
+            var reqItem = todoContext.TodoItems.Where(itm => itm.Id == item.Id).FirstOrDefault();
+            if(reqItem != null)
+            {
+                todoContext.TodoItems.Remove(reqItem);
+                todoContext.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
 
